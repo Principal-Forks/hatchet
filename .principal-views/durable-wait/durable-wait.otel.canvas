@@ -1,0 +1,152 @@
+{
+  "pv": {
+    "name": "Durable Wait",
+    "version": "1.0.0",
+    "markdown": ".principal-views/durable-wait/durable-wait.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "wait-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#F39C12",
+      "label": "Wait Started",
+      "description": "Durable wait operation initiated",
+      "event": {
+        "name": "wait.started",
+        "attributes": {
+          "hatchet.wait_key": {
+            "type": "string",
+            "description": "Key identifying what is being waited for",
+            "required": true
+          },
+          "hatchet.step_run_id": {
+            "type": "string",
+            "description": "Step run performing the wait",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "wait-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#E67E22",
+      "label": "Wait Complete",
+      "description": "Wait condition satisfied",
+      "event": {
+        "name": "wait.complete",
+        "attributes": {
+          "hatchet.wait_key": {
+            "type": "string",
+            "description": "Key that was waited for",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "wait-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Wait Failed",
+      "description": "Wait operation failed or timed out",
+      "event": {
+        "name": "wait.error",
+        "attributes": {
+          "hatchet.wait_key": {
+            "type": "string",
+            "description": "Key that was being waited for",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "wait-started",
+      "fromSide": "bottom",
+      "toNode": "wait-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "wait-started",
+      "fromSide": "right",
+      "toNode": "wait-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

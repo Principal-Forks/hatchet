@@ -1,0 +1,33 @@
+{
+  "name": "Workflow Triggering",
+  "version": "1.0.0",
+  "description": "Programmatically triggering workflows via SDK",
+  "canvas": ".principal-views/workflow-triggering/workflow-triggering.otel.canvas",
+  "spanPattern": "hatchet.run_workflow",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Workflow triggered successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Triggered workflow {{hatchet.workflow_name}}",
+        "events": {
+          "workflow.trigger.started": "Triggering workflow {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "workflow.trigger.complete": "Workflow {{hatchet.workflow_name}} triggered - run ID: {{hatchet.workflow_run_id}}"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Workflow trigger failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to trigger workflow {{hatchet.workflow_name}}: {{error.message}}",
+        "events": {
+          "workflow.trigger.started": "Triggering workflow {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "workflow.trigger.error": "Failed to trigger {{hatchet.workflow_name}}: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

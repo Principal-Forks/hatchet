@@ -1,0 +1,33 @@
+{
+  "name": "Durable Wait",
+  "version": "1.0.0",
+  "description": "Durable context wait operations for external signals",
+  "canvas": ".principal-views/durable-wait/durable-wait.otel.canvas",
+  "spanPattern": "hatchet.durable.wait_for",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Wait condition satisfied successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Wait for {{hatchet.wait_key}} completed",
+        "events": {
+          "wait.started": "Waiting for {{hatchet.wait_key}} (step: {{hatchet.step_run_id}})",
+          "wait.complete": "Wait for {{hatchet.wait_key}} satisfied"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Wait failed or timed out",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Wait for {{hatchet.wait_key}} failed: {{error.message}}",
+        "events": {
+          "wait.started": "Waiting for {{hatchet.wait_key}} (step: {{hatchet.step_run_id}})",
+          "wait.error": "Wait for {{hatchet.wait_key}} failed: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

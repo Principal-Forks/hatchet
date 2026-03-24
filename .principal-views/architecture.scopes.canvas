@@ -1,0 +1,57 @@
+{
+  "pv": {
+    "name": "Hatchet Instrumentation Scopes",
+    "version": "1.0.0",
+    "markdown": ".principal-views/architecture.scopes.md",
+    "edgeTypes": {
+      "equivalent": {
+        "label": "equivalent to",
+        "color": "#888888"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "go-sdk-scope",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 350,
+      "height": 120,
+      "color": "#00ADD8",
+      "text": "# Go SDK Instrumentation\n\n**Scope:** github.com/hatchet-dev/hatchet/sdks/go/opentelemetry\n\nWraps worker step execution with spans, propagates context",
+      "pv": {
+        "otel": {
+          "scope": "github.com/hatchet-dev/hatchet/sdks/go/opentelemetry"
+        }
+      }
+    },
+    {
+      "id": "ts-sdk-scope",
+      "type": "text",
+      "x": 400,
+      "y": 0,
+      "width": 350,
+      "height": 120,
+      "color": "#3178C6",
+      "text": "# TypeScript SDK Instrumentation\n\n**Scope:** @hatchet-dev/typescript-sdk\n\nPatches SDK methods with spans, injects attributes automatically",
+      "pv": {
+        "otel": {
+          "scope": "@hatchet-dev/typescript-sdk"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "go-to-ts-equivalent",
+      "fromNode": "go-sdk-scope",
+      "fromSide": "right",
+      "toNode": "ts-sdk-scope",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "equivalent"
+      }
+    }
+  ]
+}

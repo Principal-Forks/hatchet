@@ -1,0 +1,33 @@
+{
+  "name": "Event Publishing",
+  "version": "1.0.0",
+  "description": "Publishing events to trigger workflows",
+  "canvas": ".principal-views/event-publishing/event-publishing.otel.canvas",
+  "spanPattern": "hatchet.push_event",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Event published successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Published event {{hatchet.event_key}}",
+        "events": {
+          "event.push.started": "Publishing event {{hatchet.event_key}} (tenant: {{hatchet.tenant_id}})",
+          "event.push.complete": "Event {{hatchet.event_key}} published successfully"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Event publishing failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to publish event {{hatchet.event_key}}: {{error.message}}",
+        "events": {
+          "event.push.started": "Publishing event {{hatchet.event_key}} (tenant: {{hatchet.tenant_id}})",
+          "event.push.error": "Failed to publish {{hatchet.event_key}}: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

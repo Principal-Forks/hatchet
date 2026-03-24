@@ -1,0 +1,147 @@
+{
+  "pv": {
+    "name": "API Server HTTP",
+    "version": "1.0.0",
+    "markdown": ".principal-views/api-server/api-server.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "http-request-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "HTTP Request Received",
+      "description": "HTTP request received by API server",
+      "event": {
+        "name": "http.request.started",
+        "attributes": {
+          "http.method": {
+            "type": "string",
+            "description": "HTTP method (GET, POST, etc.)",
+            "required": true
+          },
+          "http.route": {
+            "type": "string",
+            "description": "HTTP route pattern",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      }
+    },
+    {
+      "id": "http-request-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#2ECC71",
+      "label": "HTTP Request Complete",
+      "description": "HTTP request completed successfully (2xx/3xx)",
+      "event": {
+        "name": "http.request.complete",
+        "attributes": {
+          "http.status_code": {
+            "type": "integer",
+            "description": "HTTP response status code",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      }
+    },
+    {
+      "id": "http-request-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "HTTP Request Error",
+      "description": "HTTP request failed (4xx/5xx)",
+      "event": {
+        "name": "http.request.error",
+        "attributes": {
+          "http.status_code": {
+            "type": "integer",
+            "description": "HTTP response status code",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": false
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "api/v1/server/middleware/telemetry/telemetry.go"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "http-request-started",
+      "fromSide": "bottom",
+      "toNode": "http-request-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "http-request-started",
+      "fromSide": "right",
+      "toNode": "http-request-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

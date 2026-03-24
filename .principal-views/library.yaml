@@ -1,0 +1,27 @@
+name: hatchet-telemetry
+version: 1.0.0
+description: OpenTelemetry instrumentation for Hatchet workflow orchestration
+
+nodeComponents: {}
+edgeComponents: {}
+
+scopes:
+  github.com/hatchet-dev/hatchet/sdks/go/opentelemetry:
+    color: "#00ADD8"
+    description: "Go SDK instrumentation for Hatchet workers"
+  "@hatchet-dev/typescript-sdk":
+    color: "#3178C6"
+    description: "TypeScript SDK instrumentation for Hatchet workers"
+
+resources:
+  hatchet-worker:
+    service.name: "hatchet-worker"
+    owned-scopes:
+      - "github.com/hatchet-dev/hatchet/sdks/go/opentelemetry"
+      - "@hatchet-dev/typescript-sdk"
+
+  hatchet-api:
+    service.name: "hatchet-api"
+
+  hatchet-engine:
+    service.name: "hatchet-engine"

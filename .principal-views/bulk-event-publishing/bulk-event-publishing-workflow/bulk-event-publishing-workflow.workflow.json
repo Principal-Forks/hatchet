@@ -1,0 +1,33 @@
+{
+  "name": "Bulk Event Publishing",
+  "version": "1.0.0",
+  "description": "Publishing multiple events in a single batch operation",
+  "canvas": ".principal-views/bulk-event-publishing/bulk-event-publishing.otel.canvas",
+  "spanPattern": "hatchet.bulk_push_event",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "All events published successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Published {{hatchet.bulk_count}} events",
+        "events": {
+          "bulk.push.started": "Publishing {{hatchet.bulk_count}} events (tenant: {{hatchet.tenant_id}})",
+          "bulk.push.complete": "Successfully published {{hatchet.bulk_count}} events"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Bulk event publishing failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to publish {{hatchet.bulk_count}} events: {{error.message}}",
+        "events": {
+          "bulk.push.started": "Publishing {{hatchet.bulk_count}} events (tenant: {{hatchet.tenant_id}})",
+          "bulk.push.error": "Failed to publish {{hatchet.bulk_count}} events: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

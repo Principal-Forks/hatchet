@@ -1,0 +1,33 @@
+{
+  "name": "API Server HTTP",
+  "version": "1.0.0",
+  "description": "HTTP request handling in API server",
+  "canvas": ".principal-views/api-server/api-server.otel.canvas",
+  "spanPattern": "GET /api/workflows",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "HTTP request completed successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[{{http.status_code}}] {{http.method}} {{http.route}}",
+        "events": {
+          "http.request.started": "{{http.method}} {{http.route}}",
+          "http.request.complete": "Completed with status {{http.status_code}}"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "HTTP request failed with error status",
+      "priority": 2,
+      "template": {
+        "summary": "[{{http.status_code}}] {{http.method}} {{http.route}} - {{error.message}}",
+        "events": {
+          "http.request.started": "{{http.method}} {{http.route}}",
+          "http.request.error": "Failed with status {{http.status_code}}: {{error.message}}"
+        }
+      }
+    }
+  ]
+}

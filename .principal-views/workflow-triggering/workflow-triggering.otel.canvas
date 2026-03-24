@@ -1,0 +1,157 @@
+{
+  "pv": {
+    "name": "Workflow Triggering",
+    "version": "1.0.0",
+    "markdown": ".principal-views/workflow-triggering/workflow-triggering.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "workflow-trigger-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "Workflow Trigger Started",
+      "description": "Workflow trigger operation initiated",
+      "event": {
+        "name": "workflow.trigger.started",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow being triggered",
+            "required": true
+          },
+          "hatchet.tenant_id": {
+            "type": "string",
+            "description": "Tenant UUID",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "workflow-trigger-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#2980B9",
+      "label": "Workflow Trigger Complete",
+      "description": "Workflow triggered successfully",
+      "event": {
+        "name": "workflow.trigger.complete",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow that was triggered",
+            "required": true
+          },
+          "hatchet.workflow_run_id": {
+            "type": "string",
+            "description": "ID of the created workflow run",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "workflow-trigger-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Workflow Trigger Failed",
+      "description": "Workflow trigger failed",
+      "event": {
+        "name": "workflow.trigger.error",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow that failed to trigger",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "workflow-trigger-started",
+      "fromSide": "bottom",
+      "toNode": "workflow-trigger-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "workflow-trigger-started",
+      "fromSide": "right",
+      "toNode": "workflow-trigger-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

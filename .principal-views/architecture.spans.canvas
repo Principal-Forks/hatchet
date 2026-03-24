@@ -1,0 +1,251 @@
+{
+  "pv": {
+    "name": "Hatchet Span Conventions",
+    "version": "1.0.0",
+    "markdown": ".principal-views/architecture.spans.md",
+    "edgeTypes": {
+      "parent-child": {
+        "label": "can spawn",
+        "color": "#666666"
+      },
+      "context-propagation": {
+        "label": "propagates context to",
+        "color": "#9B59B6"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "start-step-run",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 220,
+      "height": 100,
+      "color": "#E74C3C",
+      "text": "# hatchet.start_step_run\n\n**Kind:** CONSUMER\n\nMain worker step execution span"
+    },
+    {
+      "id": "cancel-step-run",
+      "type": "text",
+      "x": 0,
+      "y": 150,
+      "width": 220,
+      "height": 100,
+      "color": "#E74C3C",
+      "text": "# hatchet.cancel_step_run\n\n**Kind:** CONSUMER\n\nStep cancellation handling"
+    },
+    {
+      "id": "run-workflow",
+      "type": "text",
+      "x": 300,
+      "y": 0,
+      "width": 220,
+      "height": 100,
+      "color": "#3498DB",
+      "text": "# hatchet.run_workflow\n\n**Kind:** PRODUCER\n\nSingle workflow trigger"
+    },
+    {
+      "id": "run-workflows",
+      "type": "text",
+      "x": 300,
+      "y": 150,
+      "width": 220,
+      "height": 100,
+      "color": "#3498DB",
+      "text": "# hatchet.run_workflows\n\n**Kind:** PRODUCER\n\nBulk workflow trigger"
+    },
+    {
+      "id": "push-event",
+      "type": "text",
+      "x": 600,
+      "y": 0,
+      "width": 220,
+      "height": 100,
+      "color": "#2ECC71",
+      "text": "# hatchet.push_event\n\n**Kind:** PRODUCER\n\nSingle event publishing"
+    },
+    {
+      "id": "bulk-push-event",
+      "type": "text",
+      "x": 600,
+      "y": 150,
+      "width": 220,
+      "height": 100,
+      "color": "#2ECC71",
+      "text": "# hatchet.bulk_push_event\n\n**Kind:** PRODUCER\n\nBulk event publishing"
+    },
+    {
+      "id": "schedule-workflow",
+      "type": "text",
+      "x": 900,
+      "y": 0,
+      "width": 220,
+      "height": 100,
+      "color": "#9B59B6",
+      "text": "# hatchet.schedule_workflow\n\n**Kind:** PRODUCER\n\nScheduled workflow creation"
+    },
+    {
+      "id": "durable-wait-for",
+      "type": "text",
+      "x": 900,
+      "y": 150,
+      "width": 220,
+      "height": 100,
+      "color": "#F39C12",
+      "text": "# hatchet.durable.wait_for\n\n**Kind:** INTERNAL\n\nDurable context wait operations"
+    },
+    {
+      "id": "server-label",
+      "type": "text",
+      "x": 0,
+      "y": 320,
+      "width": 1120,
+      "height": 40,
+      "color": "#34495E",
+      "text": "## Server-Side Spans (hatchet-engine)"
+    },
+    {
+      "id": "api-server-span",
+      "type": "text",
+      "x": 0,
+      "y": 380,
+      "width": 200,
+      "height": 100,
+      "color": "#1ABC9C",
+      "text": "# HTTP Request\n\n**Kind:** SERVER\n\nAPI server HTTP handling"
+    },
+    {
+      "id": "ingestor-span",
+      "type": "text",
+      "x": 230,
+      "y": 380,
+      "width": 200,
+      "height": 100,
+      "color": "#2ECC71",
+      "text": "# hatchet.run/ingest-event\n\n**Kind:** INTERNAL\n\nEvent ingestion processing"
+    },
+    {
+      "id": "task-controller-span",
+      "type": "text",
+      "x": 460,
+      "y": 380,
+      "width": 200,
+      "height": 100,
+      "color": "#E67E22",
+      "text": "# hatchet.run/task-controller\n\n**Kind:** INTERNAL\n\nTask state transitions"
+    },
+    {
+      "id": "scheduler-span",
+      "type": "text",
+      "x": 690,
+      "y": 380,
+      "width": 200,
+      "height": 100,
+      "color": "#9B59B6",
+      "text": "# hatchet.run/handle-check-queue\n\n**Kind:** INTERNAL\n\nQueue scheduling"
+    },
+    {
+      "id": "dispatcher-span",
+      "type": "text",
+      "x": 920,
+      "y": 380,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "text": "# hatchet.run/task-assigned-bulk\n\n**Kind:** INTERNAL\n\nTask routing to workers"
+    }
+  ],
+  "edges": [
+    {
+      "id": "run-workflow-to-step",
+      "fromNode": "run-workflow",
+      "fromSide": "left",
+      "toNode": "start-step-run",
+      "toSide": "right",
+      "pv": {
+        "edgeType": "context-propagation"
+      }
+    },
+    {
+      "id": "step-to-child-workflow",
+      "fromNode": "start-step-run",
+      "fromSide": "right",
+      "toNode": "run-workflow",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "parent-child"
+      }
+    },
+    {
+      "id": "step-to-push-event",
+      "fromNode": "start-step-run",
+      "fromSide": "right",
+      "toNode": "push-event",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "parent-child"
+      }
+    },
+    {
+      "id": "step-to-durable-wait",
+      "fromNode": "start-step-run",
+      "fromSide": "bottom",
+      "toNode": "durable-wait-for",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "parent-child"
+      }
+    },
+    {
+      "id": "api-to-ingestor",
+      "fromNode": "api-server-span",
+      "fromSide": "right",
+      "toNode": "ingestor-span",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "parent-child"
+      }
+    },
+    {
+      "id": "ingestor-to-task-controller",
+      "fromNode": "ingestor-span",
+      "fromSide": "right",
+      "toNode": "task-controller-span",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "context-propagation"
+      }
+    },
+    {
+      "id": "task-controller-to-scheduler",
+      "fromNode": "task-controller-span",
+      "fromSide": "right",
+      "toNode": "scheduler-span",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "context-propagation"
+      }
+    },
+    {
+      "id": "scheduler-to-dispatcher",
+      "fromNode": "scheduler-span",
+      "fromSide": "right",
+      "toNode": "dispatcher-span",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "context-propagation"
+      }
+    },
+    {
+      "id": "dispatcher-to-step-run",
+      "fromNode": "dispatcher-span",
+      "fromSide": "top",
+      "toNode": "start-step-run",
+      "toSide": "bottom",
+      "pv": {
+        "edgeType": "context-propagation"
+      }
+    }
+  ]
+}

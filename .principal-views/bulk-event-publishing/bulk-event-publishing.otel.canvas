@@ -1,0 +1,152 @@
+{
+  "pv": {
+    "name": "Bulk Event Publishing",
+    "version": "1.0.0",
+    "markdown": ".principal-views/bulk-event-publishing/bulk-event-publishing.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "bulk-push-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#1ABC9C",
+      "label": "Bulk Push Started",
+      "description": "Bulk event publishing operation initiated",
+      "event": {
+        "name": "bulk.push.started",
+        "attributes": {
+          "hatchet.tenant_id": {
+            "type": "string",
+            "description": "Tenant UUID",
+            "required": true
+          },
+          "hatchet.bulk_count": {
+            "type": "integer",
+            "description": "Number of events being published",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "bulk-push-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#16A085",
+      "label": "Bulk Push Complete",
+      "description": "All events published successfully",
+      "event": {
+        "name": "bulk.push.complete",
+        "attributes": {
+          "hatchet.bulk_count": {
+            "type": "integer",
+            "description": "Number of events published",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "bulk-push-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Bulk Push Failed",
+      "description": "Bulk event publishing failed",
+      "event": {
+        "name": "bulk.push.error",
+        "attributes": {
+          "hatchet.bulk_count": {
+            "type": "integer",
+            "description": "Number of events attempted",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "bulk-push-started",
+      "fromSide": "bottom",
+      "toNode": "bulk-push-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "bulk-push-started",
+      "fromSide": "right",
+      "toNode": "bulk-push-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

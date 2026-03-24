@@ -1,0 +1,33 @@
+{
+  "name": "Bulk Workflow Trigger",
+  "version": "1.0.0",
+  "description": "Triggering multiple workflows in a single batch operation",
+  "canvas": ".principal-views/bulk-workflow-trigger/bulk-workflow-trigger.otel.canvas",
+  "spanPattern": "hatchet.run_workflows",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "All workflows triggered successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Triggered {{hatchet.bulk_count}} instances of {{hatchet.workflow_name}}",
+        "events": {
+          "bulk.trigger.started": "Triggering {{hatchet.bulk_count}} instances of {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "bulk.trigger.complete": "Successfully triggered {{hatchet.bulk_count}} instances of {{hatchet.workflow_name}}"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Bulk workflow trigger failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to trigger {{hatchet.workflow_name}}: {{error.message}}",
+        "events": {
+          "bulk.trigger.started": "Triggering {{hatchet.bulk_count}} instances of {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "bulk.trigger.error": "Failed to trigger {{hatchet.workflow_name}}: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

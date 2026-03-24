@@ -1,0 +1,33 @@
+{
+  "name": "Dispatcher",
+  "version": "1.0.0",
+  "description": "Task routing to workers via gRPC streams",
+  "canvas": ".principal-views/dispatcher/dispatcher.otel.canvas",
+  "spanPattern": "hatchet.run/task-assigned-bulk",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Task dispatched to worker successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Dispatched task to worker",
+        "events": {
+          "task.assigned.bulk": "Processing bulk assignment",
+          "send.to.worker": "Sending to worker ({{payload.size_bytes}} bytes)",
+          "encode.action": "Encoded action for worker"
+        }
+      }
+    },
+    {
+      "id": "cancelled",
+      "description": "Task cancellation dispatched",
+      "priority": 2,
+      "template": {
+        "summary": "[CANCELLED] Tasks cancelled",
+        "events": {
+          "tasks.cancelled": "Processing task cancellations"
+        }
+      }
+    }
+  ]
+}

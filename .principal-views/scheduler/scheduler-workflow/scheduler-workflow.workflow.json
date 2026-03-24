@@ -1,0 +1,43 @@
+{
+  "name": "Scheduler",
+  "version": "1.0.0",
+  "description": "Task scheduling and queue management",
+  "canvas": ".principal-views/scheduler/scheduler.otel.canvas",
+  "spanPattern": "hatchet.run/handle-check-queue",
+  "scenarios": [
+    {
+      "id": "check-and-schedule",
+      "description": "Queue checked and tasks scheduled",
+      "priority": 1,
+      "template": {
+        "summary": "[SCHEDULED] Tasks scheduled",
+        "events": {
+          "scheduler.check.queue": "Checking queue",
+          "scheduler.schedule.step.runs": "Scheduling step runs"
+        }
+      }
+    },
+    {
+      "id": "new-worker",
+      "description": "New worker registered",
+      "priority": 2,
+      "template": {
+        "summary": "[WORKER] New worker registered",
+        "events": {
+          "scheduler.new.worker": "Processing new worker"
+        }
+      }
+    },
+    {
+      "id": "concurrency-update",
+      "description": "Concurrency strategy updated",
+      "priority": 3,
+      "template": {
+        "summary": "[CONCURRENCY] Strategy updated",
+        "events": {
+          "scheduler.concurrency.strategy": "Processing concurrency strategy"
+        }
+      }
+    }
+  ]
+}

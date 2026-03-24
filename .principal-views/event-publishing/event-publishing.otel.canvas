@@ -1,0 +1,152 @@
+{
+  "pv": {
+    "name": "Event Publishing",
+    "version": "1.0.0",
+    "markdown": ".principal-views/event-publishing/event-publishing.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "event-push-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#2ECC71",
+      "label": "Event Push Started",
+      "description": "Event publishing operation initiated",
+      "event": {
+        "name": "event.push.started",
+        "attributes": {
+          "hatchet.event_key": {
+            "type": "string",
+            "description": "Event type/key being published",
+            "required": true
+          },
+          "hatchet.tenant_id": {
+            "type": "string",
+            "description": "Tenant UUID",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "event-push-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#27AE60",
+      "label": "Event Push Complete",
+      "description": "Event published successfully",
+      "event": {
+        "name": "event.push.complete",
+        "attributes": {
+          "hatchet.event_key": {
+            "type": "string",
+            "description": "Event type/key that was published",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "event-push-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Event Push Failed",
+      "description": "Event publishing failed",
+      "event": {
+        "name": "event.push.error",
+        "attributes": {
+          "hatchet.event_key": {
+            "type": "string",
+            "description": "Event type/key that failed",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "event-push-started",
+      "fromSide": "bottom",
+      "toNode": "event-push-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "event-push-started",
+      "fromSide": "right",
+      "toNode": "event-push-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

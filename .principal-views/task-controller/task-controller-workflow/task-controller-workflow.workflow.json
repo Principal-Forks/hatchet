@@ -1,0 +1,43 @@
+{
+  "name": "Task Controller",
+  "version": "1.0.0",
+  "description": "Task state transition handling in engine",
+  "canvas": ".principal-views/task-controller/task-controller.otel.canvas",
+  "spanPattern": "hatchet.run/TasksControllerImpl.handleTaskCompleted",
+  "scenarios": [
+    {
+      "id": "completed",
+      "description": "Task completion processed successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Task completed",
+        "events": {
+          "task.completed.started": "Processing task completion",
+          "task.completed.done": "Task completion processed"
+        }
+      }
+    },
+    {
+      "id": "failed",
+      "description": "Task failure processed",
+      "priority": 2,
+      "template": {
+        "summary": "[FAILED] Task failed",
+        "events": {
+          "task.failed.started": "Processing task failure"
+        }
+      }
+    },
+    {
+      "id": "cancelled",
+      "description": "Task cancellation processed",
+      "priority": 3,
+      "template": {
+        "summary": "[CANCELLED] Task cancelled",
+        "events": {
+          "task.cancelled.started": "Processing task cancellation"
+        }
+      }
+    }
+  ]
+}

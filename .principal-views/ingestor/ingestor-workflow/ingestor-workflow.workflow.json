@@ -1,0 +1,42 @@
+{
+  "name": "Ingestor",
+  "version": "1.0.0",
+  "description": "Event ingestion for workflow triggering",
+  "canvas": ".principal-views/ingestor/ingestor.otel.canvas",
+  "spanPattern": "hatchet.run/ingest-event",
+  "scenarios": [
+    {
+      "id": "single-event",
+      "description": "Single event ingested",
+      "priority": 1,
+      "template": {
+        "summary": "[INGESTED] Event ingested",
+        "events": {
+          "ingest.event": "Ingesting event"
+        }
+      }
+    },
+    {
+      "id": "bulk-events",
+      "description": "Bulk events ingested",
+      "priority": 2,
+      "template": {
+        "summary": "[BULK INGESTED] Events ingested",
+        "events": {
+          "bulk.ingest.event": "Bulk ingesting events"
+        }
+      }
+    },
+    {
+      "id": "replayed-event",
+      "description": "Replayed event ingested",
+      "priority": 3,
+      "template": {
+        "summary": "[REPLAYED] Event replayed",
+        "events": {
+          "ingest.replayed.event": "Replaying event"
+        }
+      }
+    }
+  ]
+}

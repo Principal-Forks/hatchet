@@ -1,0 +1,151 @@
+{
+  "pv": {
+    "name": "Dispatcher",
+    "version": "1.0.0",
+    "markdown": ".principal-views/dispatcher/dispatcher.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "child": {
+        "label": "spawns",
+        "color": "#9B59B6"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "task-assigned-bulk",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 220,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "Task Assigned Bulk",
+      "description": "Processing bulk task assignment message",
+      "event": {
+        "name": "task.assigned.bulk",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/dispatcher/dispatcher_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/dispatcher/dispatcher_v1.go"
+        ]
+      }
+    },
+    {
+      "id": "send-to-worker",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 220,
+      "height": 100,
+      "color": "#2980B9",
+      "label": "Send to Worker",
+      "description": "Sending task to worker via gRPC stream",
+      "event": {
+        "name": "send.to.worker",
+        "attributes": {
+          "payload.size_bytes": {
+            "type": "integer",
+            "description": "Payload size in bytes",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "internal/services/dispatcher/subscribed_worker_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/dispatcher/subscribed_worker_v1.go"
+        ]
+      }
+    },
+    {
+      "id": "encode-action",
+      "type": "otel-event",
+      "x": 400,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#1ABC9C",
+      "label": "Encode Action",
+      "description": "Encoding action payload for worker",
+      "event": {
+        "name": "encode.action",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/dispatcher/subscribed_worker_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/dispatcher/subscribed_worker_v1.go"
+        ]
+      }
+    },
+    {
+      "id": "tasks-cancelled",
+      "type": "otel-event",
+      "x": 700,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E67E22",
+      "label": "Tasks Cancelled",
+      "description": "Processing task cancellation batch",
+      "event": {
+        "name": "tasks.cancelled",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/dispatcher/dispatcher_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/dispatcher/dispatcher_v1.go"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "assigned-to-send",
+      "fromNode": "task-assigned-bulk",
+      "fromSide": "bottom",
+      "toNode": "send-to-worker",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "send-to-encode",
+      "fromNode": "send-to-worker",
+      "fromSide": "right",
+      "toNode": "encode-action",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "child"
+      }
+    }
+  ]
+}

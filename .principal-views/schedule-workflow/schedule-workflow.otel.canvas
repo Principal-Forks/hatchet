@@ -1,0 +1,152 @@
+{
+  "pv": {
+    "name": "Schedule Workflow",
+    "version": "1.0.0",
+    "markdown": ".principal-views/schedule-workflow/schedule-workflow.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "schedule-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#9B59B6",
+      "label": "Schedule Started",
+      "description": "Workflow scheduling operation initiated",
+      "event": {
+        "name": "schedule.started",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow being scheduled",
+            "required": true
+          },
+          "hatchet.tenant_id": {
+            "type": "string",
+            "description": "Tenant UUID",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "schedule-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#8E44AD",
+      "label": "Schedule Complete",
+      "description": "Workflow scheduled successfully",
+      "event": {
+        "name": "schedule.complete",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow that was scheduled",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "schedule-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Schedule Failed",
+      "description": "Workflow scheduling failed",
+      "event": {
+        "name": "schedule.error",
+        "attributes": {
+          "hatchet.workflow_name": {
+            "type": "string",
+            "description": "Name of workflow that failed to schedule",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "schedule-started",
+      "fromSide": "bottom",
+      "toNode": "schedule-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "schedule-started",
+      "fromSide": "right",
+      "toNode": "schedule-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

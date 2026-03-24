@@ -1,0 +1,33 @@
+{
+  "name": "Schedule Workflow",
+  "version": "1.0.0",
+  "description": "Creating scheduled workflow executions",
+  "canvas": ".principal-views/schedule-workflow/schedule-workflow.otel.canvas",
+  "spanPattern": "hatchet.schedule_workflow",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Workflow scheduled successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Scheduled workflow {{hatchet.workflow_name}}",
+        "events": {
+          "schedule.started": "Scheduling workflow {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "schedule.complete": "Workflow {{hatchet.workflow_name}} scheduled successfully"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Workflow scheduling failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to schedule {{hatchet.workflow_name}}: {{error.message}}",
+        "events": {
+          "schedule.started": "Scheduling workflow {{hatchet.workflow_name}} (tenant: {{hatchet.tenant_id}})",
+          "schedule.error": "Failed to schedule {{hatchet.workflow_name}}: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

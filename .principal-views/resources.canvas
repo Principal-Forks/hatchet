@@ -1,0 +1,87 @@
+{
+  "pv": {
+    "name": "Hatchet Service Resources",
+    "version": "1.0.0",
+    "markdown": ".principal-views/resources.md",
+    "edgeTypes": {
+      "instrumentation": {
+        "label": "Instrumented by",
+        "color": "#888888"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "hatchet-worker-resource",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 120,
+      "color": "#4A90E2",
+      "text": "# hatchet-worker\n\n**service.name:** hatchet-worker\n\nWorker processes running step functions via Go or TypeScript SDK"
+    },
+    {
+      "id": "hatchet-api-resource",
+      "type": "text",
+      "x": 350,
+      "y": 0,
+      "width": 300,
+      "height": 120,
+      "color": "#7ED321",
+      "text": "# hatchet-api\n\n**service.name:** hatchet-api\n\nREST API server handling HTTP endpoints"
+    },
+    {
+      "id": "hatchet-engine-resource",
+      "type": "text",
+      "x": 700,
+      "y": 0,
+      "width": 300,
+      "height": 120,
+      "color": "#F5A623",
+      "text": "# hatchet-engine\n\n**service.name:** hatchet-engine\n\nEngine coordinator managing task scheduling, coordination, and OTLP collection"
+    },
+    {
+      "id": "go-sdk-scope",
+      "type": "text",
+      "x": 0,
+      "y": 200,
+      "width": 300,
+      "height": 100,
+      "color": "#00ADD8",
+      "text": "# Go SDK\n\n**Scope:** github.com/hatchet-dev/hatchet/sdks/go/opentelemetry\n\nInstrumentation for Go SDK workers"
+    },
+    {
+      "id": "ts-sdk-scope",
+      "type": "text",
+      "x": 350,
+      "y": 200,
+      "width": 300,
+      "height": 100,
+      "color": "#3178C6",
+      "text": "# TypeScript SDK\n\n**Scope:** @hatchet-dev/typescript-sdk\n\nInstrumentation for TypeScript SDK workers"
+    }
+  ],
+  "edges": [
+    {
+      "id": "worker-to-go-scope",
+      "fromNode": "hatchet-worker-resource",
+      "fromSide": "bottom",
+      "toNode": "go-sdk-scope",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "instrumentation"
+      }
+    },
+    {
+      "id": "worker-to-ts-scope",
+      "fromNode": "hatchet-worker-resource",
+      "fromSide": "bottom",
+      "toNode": "ts-sdk-scope",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "instrumentation"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Step Run Execution",
+  "version": "1.0.0",
+  "description": "Worker step function execution from assignment to completion",
+  "canvas": ".principal-views/workflow-execution/workflow-execution.otel.canvas",
+  "spanPattern": "hatchet.start_step_run",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Step execution completed successfully with OK status",
+      "priority": 1,
+      "template": {
+        "summary": "[SUCCESS] Step {{hatchet.action_name}} completed",
+        "events": {
+          "step.started": "Started step {{hatchet.action_name}} [{{hatchet.step_run_id}}] for workflow {{hatchet.workflow_run_id}} on worker {{hatchet.worker_id}} (tenant: {{hatchet.tenant_id}}, retry: {{hatchet.retry_count}})",
+          "step.complete": "Step {{hatchet.step_run_id}} completed successfully"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Step execution failed with ERROR status",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Step {{hatchet.action_name}} failed: {{error.message}}",
+        "events": {
+          "step.started": "Started step {{hatchet.action_name}} [{{hatchet.step_run_id}}] for workflow {{hatchet.workflow_run_id}} on worker {{hatchet.worker_id}} (tenant: {{hatchet.tenant_id}}, retry: {{hatchet.retry_count}})",
+          "step.error": "Step {{hatchet.step_run_id}} failed: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Cancel Step Run",
+  "version": "1.0.0",
+  "description": "Handling step cancellation requests from engine",
+  "canvas": ".principal-views/cancel-step-run/cancel-step-run.otel.canvas",
+  "spanPattern": "hatchet.cancel_step_run",
+  "scenarios": [
+    {
+      "id": "success",
+      "description": "Step cancellation completed successfully",
+      "priority": 1,
+      "template": {
+        "summary": "[CANCELLED] Step {{hatchet.step_run_id}} cancelled",
+        "events": {
+          "cancel.started": "Cancelling step {{hatchet.step_run_id}} (tenant: {{hatchet.tenant_id}})",
+          "cancel.complete": "Step {{hatchet.step_run_id}} cancelled successfully"
+        }
+      }
+    },
+    {
+      "id": "error",
+      "description": "Step cancellation failed",
+      "priority": 2,
+      "template": {
+        "summary": "[ERROR] Failed to cancel step {{hatchet.step_run_id}}: {{error.message}}",
+        "events": {
+          "cancel.started": "Cancelling step {{hatchet.step_run_id}} (tenant: {{hatchet.tenant_id}})",
+          "cancel.error": "Failed to cancel {{hatchet.step_run_id}}: {{error.type}} - {{error.message}}"
+        }
+      }
+    }
+  ]
+}

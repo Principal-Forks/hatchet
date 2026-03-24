@@ -1,0 +1,105 @@
+{
+  "pv": {
+    "name": "Ingestor",
+    "version": "1.0.0",
+    "markdown": ".principal-views/ingestor/ingestor.md",
+    "edgeTypes": {
+      "variant": {
+        "label": "variant of",
+        "color": "#888888"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "ingest-event",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#2ECC71",
+      "label": "Ingest Event",
+      "description": "Processing single event ingestion",
+      "event": {
+        "name": "ingest.event",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      }
+    },
+    {
+      "id": "bulk-ingest-event",
+      "type": "otel-event",
+      "x": 350,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#27AE60",
+      "label": "Bulk Ingest Event",
+      "description": "Processing bulk event ingestion",
+      "event": {
+        "name": "bulk.ingest.event",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      }
+    },
+    {
+      "id": "ingest-replayed-event",
+      "type": "otel-event",
+      "x": 600,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "Ingest Replayed Event",
+      "description": "Processing replayed event ingestion",
+      "event": {
+        "name": "ingest.replayed.event",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/ingestor/ingestor_v1.go"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "single-to-bulk",
+      "fromNode": "ingest-event",
+      "fromSide": "right",
+      "toNode": "bulk-ingest-event",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "variant"
+      }
+    }
+  ]
+}

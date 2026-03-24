@@ -1,0 +1,178 @@
+{
+  "pv": {
+    "name": "Workflow Execution",
+    "version": "1.0.0",
+    "markdown": ".principal-views/workflow-execution/workflow-execution.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      },
+      "error": {
+        "label": "on error",
+        "color": "#E74C3C"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "step-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "Step Execution Started",
+      "description": "Step execution begins with context extraction and attribute setup",
+      "event": {
+        "name": "step.started",
+        "attributes": {
+          "hatchet.tenant_id": {
+            "type": "string",
+            "description": "Tenant UUID",
+            "required": true
+          },
+          "hatchet.worker_id": {
+            "type": "string",
+            "description": "Worker instance ID",
+            "required": true
+          },
+          "hatchet.workflow_run_id": {
+            "type": "string",
+            "description": "Workflow execution ID",
+            "required": true
+          },
+          "hatchet.step_run_id": {
+            "type": "string",
+            "description": "Step run external ID",
+            "required": true
+          },
+          "hatchet.action_name": {
+            "type": "string",
+            "description": "Task/action name",
+            "required": true
+          },
+          "hatchet.retry_count": {
+            "type": "integer",
+            "description": "Current retry attempt",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "step-complete",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 200,
+      "height": 100,
+      "color": "#2ECC71",
+      "label": "Step Execution Complete",
+      "description": "Step execution completed successfully with OK status",
+      "event": {
+        "name": "step.complete",
+        "attributes": {
+          "hatchet.step_run_id": {
+            "type": "string",
+            "description": "Step run external ID",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    },
+    {
+      "id": "step-error",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Step Execution Failed",
+      "description": "Step execution failed with ERROR status and exception",
+      "event": {
+        "name": "step.error",
+        "attributes": {
+          "hatchet.step_run_id": {
+            "type": "string",
+            "description": "Step run external ID",
+            "required": true
+          },
+          "error.type": {
+            "type": "string",
+            "description": "Error class/type name",
+            "required": true
+          },
+          "error.message": {
+            "type": "string",
+            "description": "Error message",
+            "required": true
+          }
+        }
+      },
+      "otel": {
+        "files": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "sdks/go/opentelemetry/middleware.go",
+          "sdks/typescript/src/opentelemetry/instrumentor.ts"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "started-to-complete",
+      "fromNode": "step-started",
+      "fromSide": "bottom",
+      "toNode": "step-complete",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    },
+    {
+      "id": "started-to-error",
+      "fromNode": "step-started",
+      "fromSide": "right",
+      "toNode": "step-error",
+      "toSide": "left",
+      "pv": {
+        "edgeType": "error"
+      }
+    }
+  ]
+}

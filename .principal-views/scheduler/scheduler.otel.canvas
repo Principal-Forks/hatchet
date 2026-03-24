@@ -1,0 +1,131 @@
+{
+  "pv": {
+    "name": "Scheduler",
+    "version": "1.0.0",
+    "markdown": ".principal-views/scheduler/scheduler.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "check-queue",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 220,
+      "height": 100,
+      "color": "#9B59B6",
+      "label": "Check Queue",
+      "description": "Checking queue for schedulable tasks",
+      "event": {
+        "name": "scheduler.check.queue",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      }
+    },
+    {
+      "id": "new-worker",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 200,
+      "height": 100,
+      "color": "#3498DB",
+      "label": "New Worker",
+      "description": "Processing new worker registration",
+      "event": {
+        "name": "scheduler.new.worker",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      }
+    },
+    {
+      "id": "schedule-step-runs",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 220,
+      "height": 100,
+      "color": "#8E44AD",
+      "label": "Schedule Step Runs",
+      "description": "Scheduling step runs for execution",
+      "event": {
+        "name": "scheduler.schedule.step.runs",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      }
+    },
+    {
+      "id": "new-concurrency-strategy",
+      "type": "otel-event",
+      "x": 400,
+      "y": 250,
+      "width": 220,
+      "height": 100,
+      "color": "#1ABC9C",
+      "label": "New Concurrency Strategy",
+      "description": "Processing concurrency strategy update",
+      "event": {
+        "name": "scheduler.concurrency.strategy",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/scheduler/v1/scheduler.go"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "check-to-schedule",
+      "fromNode": "check-queue",
+      "fromSide": "bottom",
+      "toNode": "schedule-step-runs",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    }
+  ]
+}

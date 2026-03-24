@@ -1,0 +1,131 @@
+{
+  "pv": {
+    "name": "Task Controller",
+    "version": "1.0.0",
+    "markdown": ".principal-views/task-controller/task-controller.md",
+    "edgeTypes": {
+      "sequence": {
+        "label": "then",
+        "color": "#666666"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "task-completed-started",
+      "type": "otel-event",
+      "x": 100,
+      "y": 50,
+      "width": 220,
+      "height": 100,
+      "color": "#27AE60",
+      "label": "Handle Task Completed",
+      "description": "Processing task completion message",
+      "event": {
+        "name": "task.completed.started",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      }
+    },
+    {
+      "id": "task-completed-done",
+      "type": "otel-event",
+      "x": 100,
+      "y": 250,
+      "width": 220,
+      "height": 100,
+      "color": "#2ECC71",
+      "label": "Task Completed Processed",
+      "description": "Task completion processed successfully",
+      "event": {
+        "name": "task.completed.done",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      }
+    },
+    {
+      "id": "task-failed-started",
+      "type": "otel-event",
+      "x": 400,
+      "y": 50,
+      "width": 220,
+      "height": 100,
+      "color": "#E74C3C",
+      "label": "Handle Task Failed",
+      "description": "Processing task failure message",
+      "event": {
+        "name": "task.failed.started",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      }
+    },
+    {
+      "id": "task-cancelled-started",
+      "type": "otel-event",
+      "x": 700,
+      "y": 50,
+      "width": 220,
+      "height": 100,
+      "color": "#F39C12",
+      "label": "Handle Task Cancelled",
+      "description": "Processing task cancellation message",
+      "event": {
+        "name": "task.cancelled.started",
+        "attributes": {}
+      },
+      "otel": {
+        "files": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      },
+      "pv": {
+        "status": "implemented",
+        "references": [
+          "internal/services/controllers/task/controller.go"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "completed-to-done",
+      "fromNode": "task-completed-started",
+      "fromSide": "bottom",
+      "toNode": "task-completed-done",
+      "toSide": "top",
+      "pv": {
+        "edgeType": "sequence"
+      }
+    }
+  ]
+}
